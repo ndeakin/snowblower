@@ -29,7 +29,7 @@
 		</style>
 	</head>
 
-	<body>
+	<body id="b">
 		<div id="d">
 			<sub>
 				Snowblower, created by Nicholas Deakin
@@ -38,14 +38,15 @@
 		<div id="container"></div>
 	</body>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 	<script src="js/Three.js"></script>
 	<script src="js/NickGL.js"></script>
 
 	<script type="text/javascript">
-
+		//= require jquery
 		// get canvas size with JQuery
 		var CANVAS_WIDTH = $(document).width(),
-		CANVAS_HEIGHT = $(document).height();
+				CANVAS_HEIGHT = $(document).height();
 
 		// Initialize the renderer, scene, and camera using NickGL
 		var initReturn = NICKGL.Init(45, CANVAS_WIDTH, CANVAS_HEIGHT);

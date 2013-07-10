@@ -1,50 +1,4 @@
-	<head>
-		<meta charset="utf-8" />
-		<title>Snow!</title>
-		<style type="text/css">
-			#container {
-				background-color: #000;
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				width: 100%
-				height: 100%
-				z-index: -1;
-			}
-			#b {
-				overflow: hidden;
-				margin: 0
-			}
-			#d {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				min-height: 16;
-				height: 16;
-				z-index: 1;
-				background-color: rgba(0, 0, 0, 0.2);
-				font-family: "Courier New", monospace;
-				color: blue;
-			}
-		</style>
-	</head>
-
-	<body id="b">
-		<div id="d">
-			<sub>
-				Snowblower, created by Nicholas Deakin
-			</sub>
-		</div>
-		<div id="container"></div>
-	</body>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-	<script src="js/Three.js"></script>
-	<script src="js/NickGL.js"></script>
-
-	<script type="text/javascript">
-		//= require jquery
-		// get canvas size with JQuery
+	// get canvas size with JQuery
 		var CANVAS_WIDTH = $(document).width(),
 				CANVAS_HEIGHT = $(document).height();
 
@@ -56,20 +10,20 @@
 
 		// create particle variables based on screen size
 		var PARTICLE_DENSITY = 0.008, // particles per pixel
-		particleCount = Math.round( PARTICLE_DENSITY * 
-		CANVAS_HEIGHT * CANVAS_WIDTH),
-		particles = new THREE.Geometry(),
-		pMaterial = new THREE.ParticleBasicMaterial({
-			color: 0xFFFFFF,
-			size: 20,
-			map: THREE.ImageUtils.loadTexture("images/particle_snow.png"),
+				particleCount = Math.round( PARTICLE_DENSITY * 
+					CANVAS_HEIGHT * CANVAS_WIDTH),
+				particles = new THREE.Geometry(),
+				pMaterial = new THREE.ParticleBasicMaterial({
+					color: 0xFFFFFF,
+					size: 20,
+					map: THREE.ImageUtils.loadTexture("<%= asset_path "snow_particle.png" %>"),
 			blending: THREE.AdditiveBlending,
 			transparent: true
 		});
 
 		// twice the magnitude of the maximum speeds
 		var INITIAL_V_HORIZONTAL = 1,
-		INITIAL_V_VERTICAL = 3;
+				INITIAL_V_VERTICAL = 3;
 
 		// function to return an initial velocity for a particle
 		function particleInitialV(){
@@ -79,55 +33,58 @@
 				( Math.random() - 0.5 ) * INITIAL_V_HORIZONTAL );	// z
 		}
 
+		// maximum positions for the particles
+		// divide by 1.8 instead of 2 so that particles don't
+		// move from -x,-y,-z  to +x,+y,+z while still visible
+		var MAX_HEIGHT = ( CANVAS_HEIGHT / 1.8 ),
+				MAX_WIDTH = ( CANVAS_WIDTH  / 1.8 );
+		
 		// return an initial position for a particle
 		function particleInitialP(){
-			var pX = ( Math.random() - 0.5 ) * MAX_WIDTH * 2.5,
+			var pX = ( Math.random() - 0.5 ) * MAX_WIDTH * 2,
 					pY = ( Math.random() - 0.5 ) * MAX_HEIGHT * 2,
-					pZ = ( Math.random() - 0.5 ) * MAX_WIDTH;
+					pZ = ( Math.random() - 0.6 ) * MAX_WIDTH * 2;
 			return new THREE.Vector3(pX, pY, pZ);	
 		}
 
-		// Maximum positions for the particles
-		var MAX_HEIGHT = (CANVAS_HEIGHT / 3 ),
-				MAX_WIDTH = (CANVAS_WIDTH / 3 );
 
 		// create actual particles
 		for (var p = 0; p < particleCount; p++)
 		{
 			// create particle with an initial position 
 			particle = new THREE.Vertex( particleInitialP() );
-
+				
 			// give the particle an initial velocity
 			particle.velocity = particleInitialV();
 
 			// add the new particle to the geometry
 			particles.vertices.push(particle);
 		}
-
+														
 		// create the particle system
 		var particleSystem = new THREE.ParticleSystem(
-			particles,
-			pMaterial);
-
+					particles,
+					pMaterial);
+																			
 		// this appears to allow the dark space of the particle.png
 		// image to not obscure other particles
 		particleSystem.sortParticles = true;
-
+																									
 		// add the particle system to the scene
 		scene.add(particleSystem);
-
+																												
 		function render(){	
 			var pCount = particleCount;
 			while (pCount--){
 				// get a particle
 				var particle = particles.vertices[pCount];
-
+				
 				// check if the particle y position should be reset
 				if ( particle.position.y < -MAX_HEIGHT ){
 					particle.position.y = MAX_HEIGHT;
 					particle.velocity = particleInitialV();
 				}
-
+														
 				// check if particle x should be reset
 				if ( particle.position.x < -MAX_WIDTH ){
 					particle.position.x = MAX_WIDTH;
@@ -135,7 +92,7 @@
 				else if ( particle.position.x > MAX_WIDTH ) {
 					particle.position.x = -MAX_WIDTH;
 				}
-
+																													
 				// check if particle z should be reset
 				if ( particle.position.z < -MAX_WIDTH ){
 					particle.position.z = MAX_WIDTH;
@@ -143,24 +100,21 @@
 				else if (particle.position.z > MAX_WIDTH){
 					particle.position.z = -MAX_WIDTH;
 				}
-
+																													
 				// update the particle velocity
 				particle.velocity.y += (Math.random() - 0.5) * 0.1;
 				particle.velocity.x += (Math.random() - 0.5) * 0.3;
 				particle.velocity.z += (Math.random() - 0.5) * 0.3;
-
+												
 				// and position
 				particle.position.addSelf(particle.velocity);
 			}
-
+																					
 			// flag to the particle system that vertices have changes
 			particleSystem.geometry.__dirtyVertices = true;
-
+													
 			// draw
 			renderer.render(scene, camera);	
 		}
-
+										
 		NICKGL.Animate(render);
-
-	</script>
-

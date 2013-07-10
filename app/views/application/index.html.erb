@@ -3,22 +3,33 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Snow!</title>
-		<style>
+		<style type="text/css">
 			#container {
-				background: #000;
-				width: 400px;
-				height: 300px;
+				background-color: #000;
+				position: absolute
+				top: 0px;
+				left: 0px;
+				z-index: -1;
+			}
+			#b {
+				overflow: hidden;
+				margin: 0
+			}
+			#d {
+				background-color: rgba(0, 0, 0, 0.2);
 			}
 		</style>
 	</head>
 
-	<body>
-
-	<div id="container">
-
-
-	</div>
-
+	<body id="b">
+		<!--
+		<div id="d">
+			<sub>
+				Snowblower, created by Nicholas Deakin
+			</sub>
+		</div>
+		-->
+		<div id="container"></div>
 	</body>
 
 	<script src="js/Three.js"></script>

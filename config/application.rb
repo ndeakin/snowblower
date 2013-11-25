@@ -8,6 +8,10 @@ if Rails.env.development?
   require 'devkit'
 end
 
+if Rails.env.production?
+  require 'em/pure_ruby.rb'
+end
+
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -62,6 +66,8 @@ module Snowblower
 
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    config.assets.precompile = true;
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

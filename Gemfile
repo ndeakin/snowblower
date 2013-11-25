@@ -28,6 +28,14 @@ gem 'jquery-rails'
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
 
+group :production do
+  #gem 'eventmachine', "1.0.3"
+end
+
+group :development do
+
+end
+
 # Use unicorn as the app server
 #gem 'eventmachine', "1.0.3"
 gem 'thin', "1.3.1"

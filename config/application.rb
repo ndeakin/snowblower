@@ -4,6 +4,11 @@ require 'rails/all'
 #require 'sprockets/railtie'
 #require 'devkit'
 
+if Rails.env.development?
+  require 'devkit'
+end
+
+
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
   Bundler.require(*Rails.groups(:assets => %w(development test)))
